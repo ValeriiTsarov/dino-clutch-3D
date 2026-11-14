@@ -24,13 +24,17 @@
   .btn:not(:disabled):active { transform: translateY(1px); filter: brightness(.9); }
   .tab { --c: var(--dgray); flex: 1; font: inherit; font-size: 14px; color: var(--white); background: var(--c); border: 0;
          padding: 10px 4px; min-height: 40px; cursor: pointer; text-shadow: none; }
-  .tab.on { --c: var(--navy); box-shadow: inset 0 3px 0 var(--orange); }
+  #tabs { background: var(--navy); gap: 4px; padding: 4px 4px 0; }
+  .tab { --c: #2c3a63; border-radius: 10px 10px 0 0; }
+  .tab.on { --c: var(--orange); }
   .round { --c: var(--orange); width: 96px; height: 96px; border-radius: 50%; border: 3px solid #0008; background: var(--c);
            font: inherit; font-size: 20px; color: #000; text-shadow: none; cursor: pointer; touch-action: none; }
   .round.held { filter: brightness(1.15); transform: scale(.96); }
 
   #top { position: absolute; left: 0; right: 0; top: 0; padding: 8px 12px; display: flex; gap: 8px; justify-content: space-between; pointer-events: none; }
   #top > * { pointer-events: auto; }
+  /* money and dino count sit on dark-green plaques (mock lowpoly16x9-farm) */
+  #topL > :first-child, #pop { width: fit-content; background: #0d4a2bdd; border: 2px solid #3fae4a; border-radius: 12px; padding: 2px 10px; margin-bottom: 4px; }
   #money { font-size: 26px; line-height: 1.1; }
   #inc { font-size: 14px; color: var(--lime); margin-left: 6px; }
   #hint { color: var(--orange); min-height: 1.3em; }
@@ -63,11 +67,12 @@
   #panel { display: none; background: #1d2b53ee; pointer-events: auto; overflow-y: auto; max-height: 30dvh; padding: 6px 10px; }
   #panel.open { display: block; }
   .pane { display: none; } .pane.on { display: block; }
-  .row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #fff2; }
+  .row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin: 6px 0; background: #ffffff0d; border: 1px solid #fff2; border-radius: 10px; }
+  .row .ico { width: 66px; height: 44px; flex-shrink: 0; object-fit: contain; }
   .row .info { flex: 1; min-width: 0; font-size: 13px; line-height: 1.25; }
   .row .info small { display: block; font-weight: 400; opacity: .8; font-size: 12px; }
   .row .acts { display: flex; flex-direction: column; gap: 4px; align-items: stretch; }
-  .row .acts .btn { white-space: nowrap; font-size: 12px; min-height: 30px; padding: 4px 10px; }
+  .row .acts .btn { --c: #dfe3ea; white-space: nowrap; font-size: 12px; min-height: 30px; padding: 4px 10px; }
   .row .acts .btn.best { --c: var(--lime); }
 
   #modal { position: absolute; inset: 0; background: #0009; display: grid; place-items: center; pointer-events: auto; }
