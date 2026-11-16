@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Dino Clutch</title>
+<title>Dino Clutch: Idle Tycoon</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><ellipse cx='8' cy='8' rx='5' ry='7' fill='%23fff1e8'/></svg>">
 <script>window.onerror = function (m) { document.title = 'ERR ' + m; console.error(m); };</script>
 <style>
@@ -15,34 +15,44 @@
   #hud { position: fixed; inset: 0; pointer-events: none; color: var(--white);
          font: 700 15px/1.3 system-ui, sans-serif; text-shadow: 0 1px 3px #000; }
   #hud .ui { pointer-events: auto; }
-  #ver { position: absolute; right: 8px; top: 2px; font-size: 11px; opacity: .6; }
   [hidden] { display: none !important; }
 
-  .btn { --c: var(--blue); font: inherit; font-size: 13px; color: #000; text-shadow: none; background: var(--c); border: 2px solid #0008;
-         border-radius: 999px; padding: 6px 12px; min-height: 34px; cursor: pointer; touch-action: manipulation; }
+  /* 3D look: top gloss gradient over --c, light top edge, dark bottom edge and a 3 px "thickness" shadow */
+  .btn { --c: var(--blue); font: inherit; font-weight: 800; font-size: 13px; color: #1b2a1f; text-shadow: none;
+         background: linear-gradient(#fff7, #fff0 55%, #0002), var(--c); border: 2px solid #0007; border-radius: 999px;
+         box-shadow: inset 0 2px 0 #fff8, inset 0 -3px 0 #0003, 0 3px 0 #0006; padding: 6px 12px; min-height: 34px; cursor: pointer; touch-action: manipulation; }
   .btn:disabled { filter: grayscale(1) brightness(.55); cursor: default; }
-  .btn:not(:disabled):active { transform: translateY(1px); filter: brightness(.9); }
-  .tab { --c: var(--dgray); flex: 1; font: inherit; font-size: 14px; color: var(--white); background: var(--c); border: 0;
-         padding: 10px 4px; min-height: 40px; cursor: pointer; text-shadow: none; }
-  #tabs { background: var(--navy); gap: 4px; padding: 4px 4px 0; }
-  .tab { --c: #265c42; border-radius: 10px 10px 0 0; }
-  .tab.on { --c: var(--orange); }
-  .round { --c: var(--orange); width: 96px; height: 96px; border-radius: 50%; border: 3px solid #0008; background: radial-gradient(circle at 50% 30%, var(--amber), var(--c));
-           font: inherit; font-size: 20px; color: #000; text-shadow: none; cursor: pointer; touch-action: none; }
+  .btn:not(:disabled):active { transform: translateY(2px); box-shadow: inset 0 2px 0 #fff8, inset 0 -3px 0 #0003, 0 1px 0 #0006; filter: brightness(.92); }
+  .film { width: 1.25em; height: 1.25em; vertical-align: -.25em; margin-right: .3em; flex-shrink: 0; }
+  .tab { --c: #265c42; flex: 1; font: inherit; font-weight: 800; font-size: 14px; color: var(--white); border: 1.5px solid #63c74d66; border-radius: 12px;
+         background: linear-gradient(#fff3, #fff0 50%, #0003), var(--c); box-shadow: inset 0 1px 0 #fff4, 0 2px 0 #0005;
+         padding: 10px 4px; min-height: 40px; cursor: pointer; text-shadow: 0 2px 2px #0008; }
+  #tabs { background: var(--navy); gap: 6px; padding: 6px 6px 0; }
+  .tab.on { --c: var(--orange); border-color: #fee76199; background: linear-gradient(#fff7, #fff0 55%, #0002), linear-gradient(var(--amber), var(--c)); box-shadow: inset 0 2px 0 #fff8, inset 0 -3px 0 #0003, 0 2px 0 #0006; }
+  /* HATCH: --R ring, dark underlay, thick green progress arc (10 % of the diameter), glossy orange button inside */
+  #ring { --R: 116px; --p: 100; width: var(--R); height: var(--R); border-radius: 50%; display: grid; place-items: center; pointer-events: auto;
+          background: conic-gradient(var(--lime) calc(var(--p) * 1%), #0b2a1f 0); box-shadow: 0 3px 0 #0006, inset 0 0 0 2px #0006; }
+  .round { --c: var(--orange); width: 80%; height: 80%; border-radius: 50%; border: 0; font: inherit; font-weight: 800; font-size: calc(var(--R) * .19); color: #4a2306; text-shadow: 0 1px 0 #fee76188;
+           background: radial-gradient(ellipse 60% 38% at 50% 22%, #fff9, #fff0), radial-gradient(circle at 50% 30%, var(--amber), var(--c) 80%);
+           box-shadow: inset 0 -5px 0 #0003, 0 0 0 3px #0b2a1f; cursor: pointer; touch-action: none; }
   .round.held { filter: brightness(1.15); transform: scale(.96); }
 
   #top { position: absolute; left: 0; right: 0; top: 0; padding: 8px 12px; display: flex; gap: 8px; justify-content: space-between; pointer-events: none; }
   #top > * { pointer-events: auto; }
   /* money and dino count sit on dark-green plaques (mock lowpoly16x9-farm) */
-  #topL > :first-child, #vis, #pop { width: fit-content; background: #193c3edd; border: 2px solid #63c74d; border-radius: 12px; padding: 2px 10px; margin-bottom: 4px; }
-  #money { font-size: 26px; line-height: 1.1; }
-  #inc { font-size: 14px; color: var(--lime); margin-left: 6px; }
+  #topL > :first-child, #vis, #pop { width: fit-content; background: linear-gradient(#ffffff1a, #ffffff00 60%), #193c3ee6; border: 2px solid #63c74d; border-radius: 12px; padding: 2px 10px; margin-bottom: 4px;
+                                     box-shadow: inset 0 1px 0 #fff3, 0 2px 0 #0005; }
+  #money { font-size: 26px; font-weight: 800; line-height: 1.1; }
+  #inc { font-size: 14px; font-weight: 800; color: var(--lime); margin-left: 6px; }
+  #vis { display: flex; align-items: center; gap: 6px; } #vis .ppl { width: 1.3em; height: 1.3em; display: none; flex-shrink: 0; }
+  .row .acts .btn .bp { margin-left: .25em; }
   #hint { color: var(--orange); min-height: 1.3em; }
   #egg { font-size: 11px; width: fit-content; max-width: 190px; white-space: nowrap; background: #193c3edd; border-radius: 8px; padding: 1px 7px; line-height: 1.25; }
   #topR { flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; padding-right: 0; margin-top: 14px; }
   #topR .btn { --c: var(--lime); animation: pulse 1.2s ease-in-out infinite; }
   #topR .btn.prest { --c: var(--orange); }
-  #topR .btn.ad { --c: var(--blue); animation: none; white-space: nowrap; padding: 4px 10px; min-height: 30px; }
+  #topR .btn.ad { --c: var(--blue); animation: none; white-space: nowrap; padding: 4px 10px; min-height: 30px; display: inline-flex; align-items: center; }
+  #mx { display: inline-flex; align-items: center; }
   #topR .btn.gift { --c: var(--orange); font-size: 18px; }
   @keyframes pulse { 50% { transform: scale(1.06); } }
   .float { position: fixed; z-index: 4; transform: translate(-50%, -50%); font-size: 22px; color: var(--lime); pointer-events: none; animation: rise 1.2s ease-out forwards; }
@@ -61,50 +71,66 @@
   #bottom { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; pointer-events: none; }
   #hatchrow { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 8px; }
   #runb { font-size: 22px; color: var(--yellow, #ffec27); min-height: 1.3em; }
-  #ring { --p: 100; width: 116px; height: 116px; border-radius: 50%; display: grid; place-items: center; pointer-events: auto;
-          background: conic-gradient(var(--lime) calc(var(--p) * 1%), #0007 0); }
   #tabs { display: flex; pointer-events: auto; }
-  #panel { display: none; background: #265c42ee; pointer-events: auto; overflow-y: auto; max-height: 30dvh; padding: 6px 10px; }
+  #panel { display: none; background: #193c3ef5; pointer-events: auto; overflow-y: auto; max-height: 30dvh; padding: 6px 10px; }
   #panel.open { display: block; }
   .pane { display: none; } .pane.on { display: block; }
-  .row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin: 6px 0; background: #ffffff0d; border: 1px solid #fff2; border-radius: 10px; }
-  .row .ico { width: 66px; height: 44px; flex-shrink: 0; object-fit: contain; }
-  .row .info { flex: 1; min-width: 0; font-size: 13px; line-height: 1.25; }
-  .row .info small { display: block; font-weight: 400; opacity: .8; font-size: 12px; }
+  .row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin: 6px 0; background: linear-gradient(#ffffff14, #ffffff06); border: 1.5px solid #63c74d55; border-radius: 12px; box-shadow: inset 0 1px 0 #fff2, 0 2px 0 #0004; }
+  /* one icon tile for every tab: SVG glyph in --c, or a rendered tour <img>; data-l = level badge */
+  .row .ico { --c: var(--lime); position: relative; width: 66px; height: 48px; flex-shrink: 0; box-sizing: border-box; display: grid; place-items: center; color: var(--c);
+              border-radius: 10px; background: radial-gradient(#3b7a4f, #193c3e); border: 1.5px solid #63c74d88; box-shadow: inset 0 1px 0 #fff3; overflow: hidden; }
+  .row .ico.dim { opacity: .45; }
+  .row .ico svg { width: 70%; height: 80%; } .row .ico img { width: 100%; height: 100%; object-fit: contain; }
+  .row .ico[data-l]::after { content: attr(data-l); position: absolute; right: 3px; bottom: 1px; font-size: 12px; line-height: 1; color: #fff; text-shadow: 0 1px 2px #000; }
+  .row .info { flex: 1; min-width: 0; font-weight: 800; font-size: 14px; line-height: 1.2; }
+  .row .info small { display: block; font-weight: 600; opacity: .8; font-size: 12px; }
+  .row .info .nx { display: none; }
   .row .acts { display: flex; flex-direction: column; gap: 4px; align-items: stretch; }
-  .row .acts .btn { --c: #c0cbdc; white-space: pre-line; font-size: 12px; min-height: 30px; padding: 4px 10px; } /* "Upgrade: X\n$price" */
+  .row .acts .btn { --c: #c0cbdc; font-size: 12px; min-height: 30px; padding: 4px 10px; border-radius: 12px; line-height: 1.15; } /* label / name / price spans, see hud.ts setBtn */
+  .row .acts .btn .bl { display: block; } .row .acts .btn .bn { white-space: nowrap; }
   .row .acts .btn.best { --c: var(--lime); }
 
-  #modal { position: absolute; inset: 0; background: #0009; display: grid; place-items: center; pointer-events: auto; }
-  #modal .box { background: var(--navy); border-radius: 14px; padding: 18px; width: min(320px, 86vw); text-align: center; }
+  #modal, #sett { position: absolute; inset: 0; background: #0009; display: grid; place-items: center; pointer-events: auto; z-index: 5; }
+  #modal .box, #sett .box { background: var(--navy); border-radius: 14px; padding: 18px; width: min(320px, 86vw); text-align: center; }
+  #sett .box { position: relative; min-height: 120px; box-sizing: border-box; font-size: 22px; }
+  #sclose { position: absolute; right: 8px; top: 8px; width: 34px; padding: 0; }
+  #ver { position: absolute; right: 16px; bottom: 10px; font-size: 20px; } /* version: bottom right, large white, no date */
+  #topR .btn.gear { --c: var(--blue); animation: none; width: 40px; height: 40px; padding: 0; font-size: 22px; line-height: 1; }
+  #welcome { position: absolute; inset: 0; background: #0009; display: grid; place-items: center; pointer-events: auto; z-index: 9; }
+  #welcome .box { background: var(--navy); border: 2px solid var(--lime); border-radius: 16px; padding: 18px; width: min(300px, 84vw); text-align: center; box-shadow: 0 4px 0 #0006; }
+  #welcome img { width: 128px; height: 128px; border-radius: 22px; border: 2px solid #63c74d88; box-shadow: 0 3px 0 #0006; }
+  #welcome h2 { margin: 10px 0 6px; font-size: 22px; } #welcome p { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
+  #welcome .btn { --c: var(--lime); min-width: 120px; font-size: 18px; }
   #modal p { margin: 0 0 14px; font-size: 16px; white-space: pre-line; }
   #modal .mbtns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
   /* portrait, mock lowpoly9x16-park: money | income | visitors in one top bar, small HATCH bottom-left over the panel */
   @media (max-aspect-ratio: 1/1) {
-    #top { padding-top: 40px; }
-    #ver { top: 38px; }
-    #topL > :first-child { position: absolute; left: 19px; right: 19px; top: 6px; width: auto; height: 29px; box-sizing: border-box; margin: 0;
-                           display: flex; align-items: center; padding: 0 10px 0 14px; }
-    #money { font-size: 20px; } #inc { font-size: 13px; margin-left: 12px; padding-left: 12px; border-left: 1px solid #ecebe766; }
-    #vis { position: absolute; top: 6px; right: 29px; height: 29px; line-height: 29px; margin: 0; padding: 0 0 0 12px; border: 0;
-           border-left: 1px solid #ecebe766; border-radius: 0; background: none; font-size: 13px; }
+    #top { padding-top: 42px; }
+    #topL > :first-child { position: absolute; left: 12px; right: 12px; top: 6px; width: auto; height: 32px; box-sizing: border-box; margin: 0;
+                           display: flex; align-items: center; padding: 0 10px 0 14px; border-radius: 14px; }
+    #money { font-size: 20px; } #inc { font-size: 14px; margin-left: 10px; padding-left: 10px; border-left: 1px solid #ecebe766; }
+    #vis { position: absolute; top: 6px; right: 22px; height: 32px; margin: 0; padding: 0 0 0 10px; border: 0;
+           border-left: 1px solid #ecebe766; border-radius: 0; background: none; box-shadow: none; font-size: 13px; } #vis .ppl { display: block; }
     #pop { font-size: 13px; padding: 0 8px; }
     #egg { max-width: 190px; font-size: 10px; white-space: nowrap; }
     #hint:empty { display: none; } /* no blank line between Dinos and #egg: keeps #egg off the entrance gate */
     #hatchrow { align-self: flex-start; margin: 0 0 4px 8px; }
     #runb { font-size: 16px; }
-    #ring { width: 85px; height: 85px; } .round { width: 69px; height: 69px; font-size: 15px; border-width: 2px; }
-    #tabs { padding: 8px 12px 0 16px; gap: 4px; border-radius: 12px 12px 0 0; }
-    .tab { min-height: 30px; padding: 4px; border-radius: 9px; }
-    #panel { max-height: 20.8dvh; padding: 3px 8px; }
+    #ring { --R: 88px; }
+    #tabs { padding: 8px 12px 0 12px; gap: 5px; border-radius: 14px 14px 0 0; }
+    .tab { min-height: 32px; padding: 4px; font-size: 13px; }
+    #panel { max-height: 22dvh; padding: 3px 8px; }
     .dbg { top: 36%; } .dbgbox { top: calc(36% - 60px); }
-    .row { padding: 6px 9px 6px 6px; } .row .ico { width: 64px; height: 40px; }
-    .row .acts .btn { width: 92px; font-size: 10.5px; line-height: 1.15; padding: 4px 3px; overflow-wrap: anywhere; }
+    .row { padding: 6px 9px 6px 6px; } .row .ico { width: 64px; height: 46px; } .row .info { font-size: 15px; }
+    /* portrait: the price alone on a green button, the target name moves into the row text */
+    .row .info .nx { display: block; }
+    .row .acts .btn { --c: var(--lime); width: 92px; min-height: 36px; font-size: 16px; padding: 4px 3px; }
+    .row .acts .btn .bl, .row .acts .btn .bn { display: none; } .row .acts .btn[data-solo] .bl, .row .acts .btn.best .bl { display: block; font-size: 10px; line-height: 1; }
+    .row .acts .btn.best { min-height: 34px; font-size: 15px; padding: 2px 3px; } .row .acts .btn .bp { margin: 0; }
   }
   @media (min-aspect-ratio: 1/1) {
     #top { right: var(--panel-w); }
-    #ver { left: 8px; right: auto; top: auto; bottom: 4px; }
     #bottom { left: auto; top: 0; width: var(--panel-w); }
     #hatchrow { position: fixed; left: 28px; bottom: 20px; margin: 0; pointer-events: none; }
     #panel { flex: 1; max-height: none; }
@@ -112,13 +138,13 @@
     #top { padding-top: 9px; }
     #topL > :first-child { padding: 3px 10px; margin-bottom: 7px; }
     #money { font-size: 31px; } #inc { font-size: 18px; } #vis, #pop { font-size: 19px; padding: 0 10px; }
-    .tab { font-size: 19px; min-height: 40px; padding: 6px 4px; border-radius: 10px; } #tabs { padding: 8px 5px 0 12px; gap: 3px; }
+    .tab { font-size: 19px; min-height: 40px; padding: 6px 4px; border-radius: 12px; } #tabs { padding: 8px 8px 0 12px; gap: 6px; }
     .tab[data-tab=habs] { flex: 1.25; } .tab[data-tab=res] { flex: 1.2; }
     #panel { padding: 6px 7px 6px 11px; }
-    .row { padding: 6.5px 3px 6.5px 8px; margin: 7px 0; gap: 12px; } .row .ico { width: 74px; height: 48px; }
-    .row .info { font-size: 15px; line-height: 1.15; } .row .info > span { white-space: pre-line; } .row .info small { font-size: 13px; } /* "Slot 1:\nTour Cart" */
-    .row .acts .btn { font-size: 13px; min-height: 44px; padding: 4px 3px; width: 160px; line-height: 1.15; }
-    #hatchrow { left: 9px; bottom: 24px; } #ring { width: 150px; height: 150px; } .round { width: 130px; height: 130px; font-size: 28px; }
+    .row { padding: 6.5px 3px 6.5px 8px; margin: 7px 0; gap: 12px; } .row .ico { width: 76px; height: 54px; }
+    .row .info { font-size: 17px; line-height: 1.15; } .row .info > span { white-space: pre-line; } .row .info small { font-size: 13px; } /* "Slot 1:\nTour Cart" */
+    .row .acts .btn { font-size: 14px; min-height: 46px; padding: 4px 3px; width: 160px; }
+    #hatchrow { left: 9px; bottom: 24px; } #ring { --R: 150px; }
   }
 </style>
 </head>
@@ -128,16 +154,17 @@
   <div id="top">
     <div id="topL">
       <div><span id="money"></span><span id="inc"></span></div>
-      <div id="vis"></div>
+      <div id="vis"><svg class="ppl" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><circle cx="17" cy="8.6" r="2.7"/><path d="M2 19c0-3.6 2.6-6 6-6s6 2.4 6 6zM14.6 13.3c.8-.2 1.6-.3 2.4-.3 3 0 5 2 5 5.2h-5.5c0-2-.6-3.8-1.9-4.9z"/></svg><span id="visn"></span></div>
       <div id="pop"></div>
       <div id="hint"></div>
       <div id="egg"></div>
     </div>
     <div id="topR">
+      <button class="btn gear" id="gear" aria-label="Settings">⚙</button>
       <button class="btn" id="newegg" hidden></button>
       <button class="btn prest" id="prest" hidden></button>
       <button class="btn gift" id="gift" hidden>🎁</button>
-      <button class="btn ad" id="ad2x">×2 income (ad)</button>
+      <button class="btn ad" id="ad2x"></button>
     </div>
   </div>
   <div id="toast"></div>
@@ -149,11 +176,13 @@
     <div id="tabs" class="ui">
       <button class="tab" data-tab="habs">Enclosures</button>
       <button class="tab" data-tab="vehs">Tours</button>
+      <button class="tab" data-tab="shops">Shops</button>
       <button class="tab" data-tab="res">Research</button>
     </div>
     <div id="panel">
       <div class="pane" id="p-habs"></div>
       <div class="pane" id="p-vehs"></div>
+      <div class="pane" id="p-shops"></div>
       <div class="pane" id="p-res"></div>
     </div>
   </div>
@@ -163,8 +192,13 @@
     </div>
   </div>
   <div id="finger" hidden>👇</div>
+  <div id="welcome" hidden>
+    <div class="box"><img src="icon.jpg" alt=""><h2>Dino Clutch</h2><p>Hold HATCH to hatch dinosaurs.<br>Build enclosures and tours: visitors pay to see them!</p><button class="btn" id="wok">OK</button></div>
+  </div>
   <div id="adov" hidden><div><b>TEST AD</b><span id="adn"></span></div></div>
-  <div id="ver"></div>
+  <div id="sett" hidden>
+    <div class="box">Settings<button class="btn" id="sclose" aria-label="Close">✕</button><div id="ver"></div></div>
+  </div>
 </div>
 <script src="game.js"></script>
 </body>
