@@ -35,11 +35,41 @@
   .tab.on { --c: var(--orange); border-color: #fee76199; background: linear-gradient(#fff7, #fff0 55%, #0002), linear-gradient(var(--amber), var(--c)); box-shadow: inset 0 2px 0 #fff8, inset 0 -3px 0 #0003, 0 2px 0 #0006; }
   /* HATCH: --R ring, dark underlay, thick green progress arc (10 % of the diameter), glossy orange button inside */
   #ring { --R: 116px; --p: 100; width: var(--R); height: var(--R); border-radius: 50%; display: grid; place-items: center; pointer-events: auto;
-          background: conic-gradient(var(--lime) calc(var(--p) * 1%), #0b2a1f 0); box-shadow: 0 3px 0 #0006, inset 0 0 0 2px #0006; }
+          background: #0b2a1f; box-shadow: 0 3px 0 #0006, inset 0 0 0 2px #0006; }
   .round { --c: var(--orange); width: 80%; height: 80%; border-radius: 50%; border: 0; font: inherit; font-weight: 800; font-size: calc(var(--R) * .19); color: #4a2306; text-shadow: 0 1px 0 #fee76188;
            background: radial-gradient(ellipse 60% 38% at 50% 22%, #fff9, #fff0), radial-gradient(circle at 50% 30%, var(--amber), var(--c) 80%);
            box-shadow: inset 0 -5px 0 #0003, 0 0 0 3px #0b2a1f; cursor: pointer; touch-action: none; }
-  .round.held { filter: brightness(1.15); transform: scale(.96); }
+  .round { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05; padding: 0; }
+  .round:not(:disabled):active { filter: brightness(1.15); transform: scale(.96); }
+  .round:disabled { filter: grayscale(.85) brightness(.7); cursor: default; }
+  .round .eg2 { font-size: calc(var(--R) * .2); font-weight: 800; max-width: 90%; }
+  /* egg icon: public/ui/eggs/<species>-<type>.png -> <type>.png (hud.ts setEgg picks the url), else a CSS egg in the type colour (--ec) */
+  .eggi { display: block; flex-shrink: 0; background: var(--ei) center / contain no-repeat; }
+  .eggi.css { background: radial-gradient(ellipse 40% 35% at 38% 30%, #fffa, #fff0), var(--ec); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; box-shadow: inset 0 -3px 0 #0003, 0 1px 0 #0005; }
+  /* egg type switcher + incubator slots (above EGG) */
+  #eggsw { display: flex; gap: 4px; pointer-events: auto; }
+  .chip { flex: 1; display: flex; align-items: center; gap: 3px; justify-content: center; min-height: 28px; padding: 2px 8px 2px 5px; font-size: 12px; white-space: nowrap; }
+  .chip .eggi { width: 15px; height: 19px; } .chip.on { --c: var(--lime); box-shadow: inset 0 2px 0 #fff8, inset 0 -3px 0 #0003, 0 0 0 3px #fee761, 0 3px 0 #0006; }
+  .chip.lock { filter: grayscale(1) brightness(.6); cursor: default; }
+  #incub { display: flex; gap: 6px; align-items: flex-start; justify-content: center; pointer-events: auto; }
+  .slot { width: 56px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px; font-weight: 800; }
+  .sring { --p: 0; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle, #193c3e 0 56%, #0000 58%), conic-gradient(var(--lime) calc(var(--p) * 1%), #0b2a1f 0); box-shadow: 0 2px 0 #0006; }
+  .sring > .eggi { width: 24px; height: 29px; }
+  .slot.empty .sring { background: radial-gradient(circle, #193c3e99 0 56%, #0000 58%), #63c74d44; } .slot.empty .eggi { display: none; }
+  .slot .btn.ad { --c: var(--blue); padding: 1px 6px; min-height: 22px; font-size: 11px; display: inline-flex; align-items: center; white-space: nowrap; }
+  .slot .btn.ad .adt { white-space: pre-line; text-align: left; line-height: 1.1; } .slot .btn.ad .film { width: 1.4em; height: 1.4em; }
+  .slot .btn.fin { --c: var(--lime); padding: 1px 6px; min-height: 22px; font-size: 11px; white-space: nowrap; }
+  .slot .st { min-height: 1.2em; text-shadow: 0 1px 3px #000; }
+  /* rarity banner + coloured floats */
+  .rpop { position: fixed; z-index: 4; left: 50%; top: 34%; transform: translate(-50%, -50%); font-size: 40px; font-weight: 900; letter-spacing: 1px; color: var(--rc); pointer-events: none;
+          text-shadow: 0 3px 0 #000a, 0 0 16px var(--rc); -webkit-text-stroke: 2px #0007; paint-order: stroke fill; animation: rpop 1.7s ease-out forwards; }
+  .rpop.big { font-size: 66px; animation-duration: 2.4s; }
+  .port .rpop { font-size: 30px; } .port .rpop.big { font-size: 40px; }
+  @keyframes rpop { 0% { transform: translate(-50%, -50%) scale(.3); opacity: 0 } 12% { transform: translate(-50%, -50%) scale(1.25); opacity: 1 } 25% { transform: translate(-50%, -50%) scale(1) } 80% { opacity: 1 } to { transform: translate(-50%, -90%) scale(1); opacity: 0 } }
+  .dots { display: flex; gap: 6px; align-items: center; margin-top: 2px; } .dots span { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 800; } .dots span.z { opacity: .35; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--rc); box-shadow: inset 0 -2px 0 #0004, 0 0 0 1px #0006; }
+  #ad2x { --c: #ffe07a; } #adptero { --c: #7ff0ff; } /* rewarded ads: squares in the left column with the gifts */
+  .gbtn.adg { flex-direction: column; } .gbtn.adg .film { width: 24px; height: 24px; margin: 0; } .gbtn.adg .adt { white-space: nowrap; font-size: 11px; }
 
   #top { position: absolute; left: 0; right: 0; top: 0; padding: 8px 12px; display: flex; gap: 8px; justify-content: space-between; pointer-events: none; }
   #top > * { pointer-events: auto; }
@@ -71,7 +101,7 @@
   @keyframes rise { to { transform: translate(-50%, -140px); opacity: 0; } }
   #adov { position: absolute; inset: 0; z-index: 10; background: #000d; display: grid; place-items: center; text-align: center; pointer-events: auto; }
   #adov b { display: block; font-size: 36px; } #adov span { font-size: 18px; }
-  #finger { position: fixed; z-index: 3; font-size: 40px; line-height: 1; transform: translateX(-50%); pointer-events: none; animation: bob .7s ease-in-out infinite alternate; }
+  #finger { position: fixed; z-index: 6; font-size: 40px; line-height: 1; transform: translateX(-50%); pointer-events: none; animation: bob .7s ease-in-out infinite alternate; }
   @keyframes bob { to { margin-top: 12px; } }
   .dbg { --c: var(--red); animation: none; pointer-events: auto; opacity: .7; width: 40px; height: 40px; padding: 0; font-size: 12px; }
   .toprow { display: flex; gap: 6px; position: relative; }
@@ -85,7 +115,7 @@
 
   #bottom { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; pointer-events: none; }
   #brow { display: flex; justify-content: space-between; align-items: flex-end; pointer-events: none; }
-  #hatchrow { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0 8px 8px 0; }
+  #hatchrow { display: flex; flex-direction: column; align-items: center; gap: 5px; margin: 0 8px 8px 0; }
   /* zoom: vertical slider bottom left (as in ArkOfColors3D), top = closest */
   #zoomw { pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 4px; margin: 0 0 8px 8px;
            background: #193c3ecc; border: 2px solid #63c74d; border-radius: 16px; font-size: 18px; font-weight: 800; line-height: 1; }
@@ -94,7 +124,6 @@
   #zoom::-moz-range-track { width: 6px; border-radius: 3px; background: #ffffff55; }
   #zoom::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-left: -8px; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 #0005; }
   #zoom::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 #0005; }
-  #runb { font-size: 22px; color: var(--yellow, #ffec27); min-height: 1.3em; }
   #tabs { display: flex; pointer-events: auto; }
   #panel { display: none; background: #193c3ef5; pointer-events: auto; overflow-y: auto; max-height: 30dvh; padding: 6px 10px; }
   #panel.open { display: block; }
@@ -125,6 +154,47 @@
   #welcome img { width: 128px; height: 128px; border-radius: 22px; border: 2px solid #63c74d88; box-shadow: 0 3px 0 #0006; }
   #welcome h2 { margin: 10px 0 6px; font-size: 22px; } #welcome p { margin: 0 0 14px; font-size: 15px; font-weight: 600; }
   #welcome .btn { --c: var(--lime); min-width: 120px; font-size: 18px; }
+  /* gifts: two square buttons over the zoom slider (fill = progress to the next gift, dot + pulse = something waits); popups as the ants game */
+  #lcol { display: flex; flex-direction: column; align-items: flex-start; pointer-events: none; }
+  #gifts { display: flex; flex-direction: column; gap: 8px; margin: 0 0 8px 8px; }
+  .land #lcol { display: contents; } .land #gifts { position: fixed; left: 16px; bottom: 278px; margin: 0; }
+  .gbtn { --c: var(--amber); --p: 0; position: relative; width: 54px; height: 54px; padding: 0; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-size: 11px; line-height: 1; }
+  .gbtn::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--p) * 1%); background: #63c74d99; }
+  .gbtn > * { position: relative; } .gbtn svg { width: 26px; height: 26px; } .gbtn .gt { min-height: 11px; }
+  #gplay { --c: #7ff0ff; }
+  .gbtn .dot { position: absolute; right: 3px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 2px #fff; display: none; }
+  .gbtn.rdy { animation: pulse 1.2s ease-in-out infinite; } .gbtn.rdy .dot { display: block; }
+  #gpop { position: absolute; inset: 0; background: #0009; display: grid; place-items: center; pointer-events: auto; z-index: 5; }
+  #gpop .box { position: relative; background: var(--navy); border: 2px solid var(--lime); border-radius: 16px; padding: 14px 16px 16px; width: min(640px, 92vw); box-sizing: border-box; text-align: center; box-shadow: 0 4px 0 #0006; }
+  #gpop h3 { margin: 0; font-size: 24px; } #gsub { font-size: 14px; opacity: .9; margin: 4px 0 10px; min-height: 1.3em; }
+  #gx { position: absolute; right: 8px; top: 8px; width: 34px; padding: 0; }
+  #gweek { display: grid; grid-template-columns: repeat(3, 1fr) 1.25fr; grid-template-rows: 1fr 1fr; gap: 8px; }
+  #glist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile { font: inherit; color: var(--white); text-shadow: inherit; position: relative; background: linear-gradient(#ffffff14, #ffffff06), #0b2a1f; border: 2px solid #63c74d55; border-radius: 12px; padding: 6px 4px; cursor: pointer; touch-action: manipulation; box-shadow: 0 2px 0 #0005; }
+  .tile.ready { border-color: var(--amber); background: linear-gradient(#feae3433, #feae3411), #3a3020; box-shadow: 0 0 0 2px #feae3466, 0 0 14px #feae34aa; }
+  .tile.done { opacity: .5; } .tile.wait { opacity: .85; cursor: default; }
+  .tile .gi { display: grid; place-items: center; color: var(--amber); } .tile .gi svg { width: 100%; height: 100%; } .tile .gi b { font-size: 24px; color: var(--lime); }
+  .tile .mark { position: absolute; right: 5px; bottom: 3px; font-style: normal; font-size: 14px; line-height: 1; } .tile.done .mark { color: var(--lime); font-weight: 900; }
+  .tile.card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 96px; }
+  .tile.card .mark { top: 4px; bottom: auto; }
+  .tile.card .tt { font-size: 11px; opacity: .8; } .tile.card .gi { width: 60px; height: 60px; } .tile.card .gi .eggi { width: 54px; height: 64px; }
+  #ginfo { position: absolute; inset: 0; border-radius: 14px; background: #000a; display: grid; place-items: center; z-index: 2; }
+  #ginfo .ib { background: var(--navy); border: 2px solid var(--amber); border-radius: 14px; padding: 12px 14px; width: min(260px, 86%); display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 4px 0 #0006; }
+  #ginfo .gi { width: 96px; height: 96px; display: grid; place-items: center; color: var(--amber); } #ginfo .gi .eggi { width: 84px; height: 100px; } #ginfo .gi svg { width: 100%; height: 100%; } #ginfo .gi b { font-size: 34px; color: var(--lime); }
+  #ginfo b { font-size: 18px; } #ginfo p { margin: 0; font-size: 14px; } #ginfo small { font-size: 12px; opacity: .8; } #ginfo .btn { --c: var(--lime); min-width: 90px; margin-top: 4px; }
+  .tile.card .amt { font-size: 16px; } .tile.card .cap { font-size: 11px; opacity: .75; min-height: 1em; }
+  .tile.big { grid-column: 4; grid-row: 1 / 3; } .tile.big .gi { width: 80px; height: 80px; } .tile.big .gi .eggi { width: 66px; height: 80px; } .tile.big .amt { font-size: 22px; }
+  .tile.rw { display: grid; grid-template-columns: 38px 1fr; grid-template-areas: "i a" "i b"; column-gap: 8px; row-gap: 3px; align-items: center; text-align: left; padding: 6px 8px; min-height: 52px; }
+  .tile.rw .gi { grid-area: i; width: 38px; height: 38px; } .tile.rw .gi .eggi { width: 40px; height: 48px; } .tile.rw .gi b { font-size: 18px; }
+  .tile.rw .amt { grid-area: a; font-size: 16px; line-height: 1; } .tile.rw .tt, .tile.rw .cap { display: none; }
+  .tile.rw .bar { grid-area: b; position: relative; height: 16px; border-radius: 8px; background: #0b2a1f; box-shadow: inset 0 1px 3px #000a; overflow: hidden; }
+  .tile.rw .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--k) * 100%); background: linear-gradient(#ffe06a, var(--amber)); }
+  .tile.rw .bar.go i { background: linear-gradient(#a3ee87, var(--lime)); }
+  .tile.rw .bar em { position: relative; display: block; text-align: center; font-size: 11px; font-style: normal; line-height: 16px; }
+  .tile.rw .mark { top: 4px; bottom: auto; } .tile .vid { position: absolute; right: 24px; top: 4px; color: #ff9aa0; line-height: 0; } .tile .vid .film { width: 16px; height: 16px; margin: 0; }
+  .port #gpop .box { width: min(340px, 96vw); padding: 12px 8px 12px; } .port #gweek { gap: 5px; } .port #glist { gap: 5px; } .port .tile.card { min-height: 84px; padding: 4px 2px; }
+  .port .tile.rw { grid-template-columns: 30px 1fr; column-gap: 6px; padding: 5px 6px; min-height: 48px; } .port .tile.rw .gi { width: 30px; height: 30px; } .port .tile.rw .gi .eggi { width: 34px; height: 40px; } .port .tile.card .gi { width: 50px; height: 50px; } .port .tile.card .gi .eggi { width: 46px; height: 54px; } .port .tile.big .gi { width: 70px; height: 70px; } .port .tile.big .gi .eggi { width: 62px; height: 74px; } .port .tile.rw .amt { font-size: 14px; }
+  .port .tile .mark { font-size: 12px; } .port .tile .vid { right: 20px; }
   #modal p { margin: 0 0 14px; font-size: 16px; white-space: pre-line; }
   #modal .mbtns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
@@ -140,7 +210,7 @@
     .port #egg { max-width: 100%; box-sizing: border-box; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .port #hint:empty { display: none; } /* no blank line between Dinos and #egg: keeps #egg off the entrance gate */
     .port #hatchrow { margin: 0 8px 4px 0; } .port #zoomw { margin-bottom: 6px; }
-    .port #runb { font-size: 16px; }
+    .port .slot { width: 50px; } .port .sring { width: 42px; height: 42px; } .port .chip { font-size: 11px; padding: 2px 5px 2px 3px; min-height: 26px; }
     .port #ring { --R: 88px; }
     .port #tabs { padding: 8px 12px 0 12px; gap: 5px; border-radius: 14px 14px 0 0; }
     .port .tab { min-height: 32px; padding: 4px; font-size: 13px; }
@@ -185,16 +255,24 @@
       <button class="btn" id="newegg" hidden></button>
       <button class="btn prest" id="prest" hidden></button>
       <button class="btn gift" id="gift" hidden>🎁</button>
-      <button class="btn ad" id="ad2x"></button>
     </div>
   </div>
   <div id="toast"></div>
   <div id="bottom">
     <div id="brow">
-      <div id="zoomw" class="ui"><span>+</span><input id="zoom" type="range" min="0" max="1000" aria-label="Zoom"><span>−</span></div>
+      <div id="lcol">
+        <div id="gifts" class="ui">
+          <button class="btn gbtn adg" id="ad2x" aria-label="Watch ad: income x2"></button>
+          <button class="btn gbtn adg" id="adptero" aria-label="Watch ad: Crystal Skies"></button>
+          <button class="btn gbtn" id="gdaily" aria-label="Daily gift"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9h18v4H3zM4 14h16v7H4zM12 9C9 2 4 5 8 9zM12 9c3-7 8-4 4 0z"/></svg><span class="gt"></span><i class="dot"></i></button>
+          <button class="btn gbtn" id="gplay" aria-label="Play-time gift"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M11 6h2v6l4 2-1 1.7-5-2.7z"/></svg><span class="gt"></span><i class="dot"></i></button>
+        </div>
+        <div id="zoomw" class="ui"><span>+</span><input id="zoom" type="range" min="0" max="1000" aria-label="Zoom"><span>−</span></div>
+      </div>
       <div id="hatchrow">
-        <div id="runb"></div>
-        <div id="ring"><button class="round" id="hatch">HATCH</button></div>
+        <div id="eggsw"></div>
+        <div id="incub"></div>
+        <div id="ring"><button class="round" id="eggbtn"></button></div>
       </div>
     </div>
     <div id="tabs" class="ui">
@@ -215,9 +293,13 @@
       <div class="mbtns"><button class="btn" id="mno" style="--c:var(--dgray);color:var(--white)">Cancel</button><button class="btn" id="mx" hidden style="--c:var(--lime)"></button><button class="btn" id="mok">OK</button></div>
     </div>
   </div>
+  <div id="gpop" hidden>
+    <div class="box"><h3 id="gtitle"></h3><div id="gsub"></div><div id="gweek"></div><div id="glist"></div><button class="btn" id="gx" aria-label="Close">✕</button>
+      <div id="ginfo" hidden><div class="ib"><div class="gi"></div><b></b><p></p><small></small><button class="btn">OK</button></div></div></div>
+  </div>
   <div id="finger" hidden>👇</div>
   <div id="welcome" hidden>
-    <div class="box"><img src="icon.jpg" alt=""><h2>Dino Clutch</h2><p>Hold HATCH to hatch dinosaurs.<br>Build enclosures and tours: visitors pay to see them!</p><button class="btn" id="wok">OK</button></div>
+    <div class="box"><img src="icon.jpg" alt=""><h2>Dino Clutch</h2><p>Tap EGG to hatch dinosaurs: rarer ones bring more visitors.<br>Build enclosures and tours: visitors pay to see them!</p><button class="btn" id="wok">OK</button></div>
   </div>
   <div id="adov" hidden><div><b>TEST AD</b><span id="adn"></span></div></div>
   <div id="sett" hidden>
