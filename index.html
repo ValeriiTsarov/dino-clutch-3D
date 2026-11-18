@@ -97,7 +97,7 @@
   #mx { display: inline-flex; align-items: center; }
   #topR .btn.gift { --c: var(--orange); font-size: 18px; }
   @keyframes pulse { 50% { transform: scale(1.06); } }
-  .float { position: fixed; z-index: 4; transform: translate(-50%, -50%); font-size: 22px; color: var(--lime); pointer-events: none; animation: rise 1.2s ease-out forwards; }
+  .float { position: fixed; z-index: 4; transform: translate(-50%, -50%); font-size: 22px; color: var(--lime); pointer-events: none; animation: rise 6s ease-out forwards; }
   @keyframes rise { to { transform: translate(-50%, -140px); opacity: 0; } }
   #adov { position: absolute; inset: 0; z-index: 10; background: #000d; display: grid; place-items: center; text-align: center; pointer-events: auto; }
   #adov b { display: block; font-size: 36px; } #adov span { font-size: 18px; }
@@ -237,6 +237,151 @@
     .land .row .info { font-size: 17px; line-height: 1.15; } .land .row .info > span { white-space: pre-line; } .land .row .info small { font-size: 13px; } /* "Slot 1:\nTour Cart" */
     .land .row .acts .btn { font-size: 14px; min-height: 46px; padding: 4px 3px; width: 160px; }
     .land #ring { --R: 150px; }
+
+  /* ===== flat skin (v0.1.47): white rounded cards with a soft shadow, dark-green text, glossy green/orange accents. Mocks: docs/art/ui-variants/ui-{land,port}-flat_v1.png.
+     CSS only: ids, DOM and hud.ts logic are the same as before. Colour of every button still comes from --c. ===== */
+  :root { --ink: #1c4a2c; --ink2: #4d6a56; --card: #ffffff; --sh: 0 2px 0 #0002, 0 4px 10px #0003; --g1: #9be85f; --g2: #5cc83a; }
+  html, body { background: #4aa84a; }
+  #hud { color: var(--ink); text-shadow: none; }
+  .btn { --c: #fff; color: var(--ink); text-shadow: none; border: 0; border-radius: 999px; background: linear-gradient(#fff8, #fff0 60%), var(--c);
+         box-shadow: 0 3px 0 color-mix(in srgb, var(--c) 62%, #000), 0 5px 8px #0003; padding: 4px 12px; }
+  .btn:not(:disabled):active { transform: translateY(2px); filter: none; box-shadow: 0 1px 0 color-mix(in srgb, var(--c) 62%, #000); }
+  .btn:disabled { filter: grayscale(1) opacity(.6); }
+  .btn.dbg { --c: #5cc83a; color: #fff; opacity: .9; border-radius: 50%; } .btn.gear { --c: #fff; border-radius: 50%; }
+  .btn.ad, .btn.fin { --c: #fff; }
+  .slot .btn.ad { --c: #fff3c4; position: relative; overflow: visible; margin-bottom: 9px; font-size: 13px; min-height: 26px; }
+  .slot .btn.ad .m5 { position: absolute; left: 50%; bottom: -10px; transform: translateX(-50%); display: flex; align-items: center; gap: 1px; padding: 1px 5px; border-radius: 8px;
+                      background: linear-gradient(#ffd25a, #f5a623); color: #5a2d00; font-size: 10px; line-height: 1; white-space: nowrap; box-shadow: 0 1px 0 #0004, 0 0 0 1.5px #fff; }
+  .slot .btn.ad .m5 i { width: 5px; height: 7px; border-radius: 50% / 60% 60% 40% 40%; background: #fff; box-shadow: inset 0 -1px 0 #0003; margin-right: 1px; } .slot .btn.fin { --c: var(--g2); color: #fff; text-shadow: 0 1px 1px #0005; }
+  /* plaques */
+  #topL > :first-child, #vis, #pop, #egg, .land #egg { background: var(--card); color: var(--ink); border: 0; border-radius: 999px; box-shadow: var(--sh); padding: 4px 14px; margin-bottom: 6px; line-height: 1.2; }
+  #topL > :first-child { background: linear-gradient(#ffffff22, #fff0 55%), #1f6b3a; color: #fff; box-shadow: inset 0 0 0 2px #fff, var(--sh); }
+  #inc { color: #9bf26a; }
+  #vis, #pop { font-weight: 800; }
+  .land #vis, .land #pop, .land #egg { font-size: 18px; padding: 3px 14px 3px 12px; }
+  .land #topL > :first-child { padding: 3px 16px; margin-bottom: 8px; }
+  .land #vis, .land #pop { display: flex; align-items: center; gap: 8px; } .land #vis .ppl { display: block; color: #2c8a45; }
+  #pop::before, .port #topL > :first-child::before, #egg::before { content: ''; display: inline-block; flex-shrink: 0; background: #2c8a45; -webkit-mask: var(--m) center / contain no-repeat; mask: var(--m) center / contain no-repeat; }
+  /* dino silhouette before "Dinos N / M" */
+  #pop::before { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 24'%3E%3Cpath d='M2 14c3-2 6-2 9-1 1-5 5-8 10-8 3 0 5 1 6 3l3 0 1 3-4 1c0 3-2 5-5 6l-1 5h-3l0-4c-3 1-6 0-8-1l-2 4H5l1-5c-2 0-3-1-4-3z'/%3E%3C/svg%3E"); width: 1.5em; height: 1.1em; margin-right: 6px; }
+  .port #pop::before { width: 1.3em; height: 1em; margin-right: 4px; vertical-align: -.1em; }
+  #egg::before { display: none; }
+  #hint { color: #3b1d00; font-size: 14px; line-height: 1.2; }
+  #hint:not(:empty) { background: linear-gradient(#fff6, #fff0 60%), #ffa733; border-radius: 14px; padding: 4px 12px; margin-bottom: 6px; box-shadow: var(--sh); width: fit-content; max-width: 100%; box-sizing: border-box; }
+  .land #hint:not(:empty) { font-size: 17px; font-weight: 800; background: linear-gradient(#fff6, #fff0 60%), #ffd43b; color: #b3261e; border-radius: 999px; padding: 3px 14px; }
+  #egg { color: var(--ink); font-weight: 800; }
+  .land #egg { font-size: 18px; }
+  .port #topL > :first-child { background: var(--card); color: var(--ink); height: 38px; border-radius: 16px; box-shadow: var(--sh); }
+  .port #topL > :first-child::before { --m: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 2h6l-1.5 3h-3zM12 6c5 0 8 3 8 8s-3 8-8 8-8-3-8-8 3-8 8-8z'/%3E%3C/svg%3E"); width: 20px; height: 20px; margin-right: 4px; background: #2c8a45; }
+  .port #money { font-size: 19px; } .port #inc { color: #2c8a45; background: #e4f8da; border-radius: 8px; padding: 1px 5px; border-left: 0; margin-left: 6px; font-size: 12px; white-space: nowrap; }
+  .port #vis { background: none; box-shadow: none; border-left: 1px solid #1c4a2c33; color: var(--ink); height: 38px; margin: 0; border-radius: 0; padding: 0 0 0 8px; top: 6px; font-size: 12px; right: 14px; }
+  .port #vis .ppl { color: #2c8a45; }
+  .port #pop { background: #bfe9ff; font-size: 14px; padding: 2px 12px; }
+  .port #pop::before { background: #1c6aa0; }
+  .port #egg { font-size: 11px; padding: 2px 10px; }
+  /* tabs: white pills, active orange; portrait tabs carry an icon */
+  #tabs { background: none; gap: 6px; padding: 8px 10px 0; }
+  .tab { --c: #fff; color: var(--ink); text-shadow: none; border: 0; border-radius: 999px; background: linear-gradient(#fff8, #fff0 60%), var(--c); box-shadow: 0 3px 0 #0002, 0 4px 8px #0002; }
+  .tab.on { --c: #ff8a1f; color: #fff; text-shadow: 0 1px 1px #0004; background: linear-gradient(#fff6, #fff0 60%), linear-gradient(#ffa733, var(--c)); box-shadow: 0 3px 0 #b85a0a, 0 4px 8px #0003; }
+  .tab svg { display: none; }
+  .port .tab { --c: #d4f0ff; display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 36px; }
+  .port .tab.on { --c: #ff8a1f; } .port .tab svg { display: block; width: 18px; height: 18px; flex-shrink: 0; }
+  .port #tabs { background: #ffffffee; border-radius: 18px 18px 0 0; padding: 8px 10px 0; box-shadow: 0 -3px 10px #0002; }
+  .land #bottom { background: #3f9a43; box-shadow: inset 3px 0 0 #2d7a34; padding-left: 0; } .land #tabs { padding: 10px 10px 0; gap: 6px; } .land .tab { font-size: 17px; padding: 4px 2px; min-height: 38px; }
+  #panel { background: #3f9a43; border: 0; padding: 4px 10px 8px; }
+  .land #panel { margin: 0; padding: 4px 8px 8px 10px; }
+  .port #panel { background: #ffffffee; padding: 4px 10px 8px; }
+  /* rows = white cards */
+  .row { background: var(--card); border: 0; border-radius: 18px; box-shadow: var(--sh); filter: none; padding: 8px 8px 8px 8px; margin: 8px 0; }
+  .land .row { padding: 8px 8px 8px 8px; margin: 8px 0; gap: 10px; } .port .row { padding: 7px 8px 7px 7px; margin: 6px 0; background: #fff; box-shadow: 0 1px 0 #0001, 0 2px 8px #0002; }
+  .row .ico { --c: #fff; border: 0; border-radius: 14px; background: linear-gradient(#5fd070, #2f9e4f); box-shadow: inset 0 -3px 0 #0002; }
+  .row .ico[data-l]::after { color: #fff; text-shadow: 0 1px 2px #0006; left: 6px; right: auto; bottom: 7px; z-index: 1; font-weight: 900; }
+  .port #pop { margin-top: 4px; }
+  .row .info { color: var(--ink); } .row .info small { color: var(--ink2); opacity: 1; }
+  .dots span { color: var(--ink); }
+  .row .acts .btn { --c: #e9ecea; color: var(--ink); border-radius: 12px; box-shadow: 0 2px 0 #b4bbb6; }
+  .row .acts .btn.best, .port .row .acts .btn { --c: var(--g2); background: linear-gradient(#ffffff66, #fff0 55%), linear-gradient(var(--g1), var(--g2)); color: #123a12; box-shadow: 0 3px 0 #3a9a2a; }
+  .land .row .acts .btn { width: 148px; } .land .row .ico { width: 66px; }
+  .tile { background: #f3f7f1; color: var(--ink); border: 2px solid #cfe0cf; box-shadow: 0 2px 0 #0002; }
+  .tile.ready { border-color: #ff9a2a; background: #fff4de; box-shadow: 0 0 0 2px #ffb85a88; }
+  .tile .gi { color: #e08a10; } .tile .gi b { color: #2c8a45; } .tile.card .tt, .tile.card .cap { color: var(--ink2); opacity: 1; }
+  .tile.done .mark { color: #2c8a45; } .tile .vid { color: #e0434b; }
+  .tile.rw .bar { background: #dfe8dc; box-shadow: inset 0 1px 2px #0003; } .tile.rw .bar em { color: var(--ink); }
+  /* EGG button, chips, slots */
+  #ring { background: #fff; box-shadow: 0 4px 0 #0003, 0 6px 12px #0003; }
+  .round { width: 86%; height: 86%; color: #fff; text-shadow: 0 2px 0 #b85a0a, 0 0 6px #b85a0a99; box-shadow: inset 0 -5px 0 #0003; background: radial-gradient(ellipse 60% 38% at 50% 22%, #fff7, #fff0), radial-gradient(circle at 50% 30%, #ffb53a, #ff7a14 80%); }
+  .chip { --c: #fff; font-weight: 800; padding: 0 8px 0 5px; box-shadow: 0 2px 0 #0002, 0 3px 6px #0003; }
+  .chip.on { --c: #5cc83a; color: #fff; text-shadow: 0 1px 1px #0005; box-shadow: 0 0 0 3px #fff, 0 3px 6px #0003; }
+  .chip.lock { filter: grayscale(1) opacity(.7); }
+  .sring { background: radial-gradient(circle, #1c4a2c 0 56%, #0000 58%), conic-gradient(var(--g2) calc(var(--p) * 1%), #1c4a2c 0); box-shadow: 0 0 0 3px #fff, 0 3px 6px 3px #0003; margin: 3px 0; }
+  .slot.empty .sring { background: radial-gradient(circle, #1c4a2ccc 0 56%, #0000 58%), #ffffff55; }
+  .slot .st { color: #fff; -webkit-text-stroke: 3px #123a22; paint-order: stroke fill; text-shadow: none; }
+  .fps { -webkit-text-stroke: 3px #123a22; }
+  /* zoom slider: white frame, green track */
+  #zoomw { background: #fff; border: 0; border-radius: 16px; box-shadow: var(--sh); color: var(--ink); }
+  #zoom::-webkit-slider-runnable-track { background: #5cc83a; } #zoom::-moz-range-track { background: #5cc83a; }
+  #zoom::-webkit-slider-thumb { background: #fff; border: 3px solid #2c8a45; box-sizing: border-box; box-shadow: 0 2px 4px #0004; } #zoom::-moz-range-thumb { background: #fff; border: 3px solid #2c8a45; box-sizing: border-box; }
+  /* left column: gifts and ads, flat white squares */
+  .gbtn { --c: #fff; width: 58px; height: 58px; border-radius: 16px; color: var(--ink); text-shadow: none; overflow: hidden; font-weight: 800; }
+  .gbtn::before { background: #5cc83a55; }
+  #gdaily, #gplay { --c: #fff; } #gdaily svg { color: #e8541e; } #gplay svg { color: #1c4a2c; }
+  #ad2x { --c: #fff0b0; } #adptero { --c: #c9f6ff; }
+  .gbtn.adg { gap: 1px; } .gbtn.adg .film { width: 24px; height: 24px; color: #1c4a2c; } .gbtn svg { width: 24px; height: 24px; }
+  .gbtn .dot { right: 4px; top: 4px; width: 10px; height: 10px; box-shadow: 0 0 0 2px #fff; }
+  .gbtn.adg .dot { right: 3px; top: 3px; }
+  .gbtn.adg { position: relative; } .gbtn.adg .gi { width: 26px; height: 26px; margin: 0; } #ad2x .gi { color: #e8a300; } #adptero .gi { color: #1aa3c4; }
+  .gbtn.adg .film.fb { position: absolute; right: 3px; top: 3px; width: 14px; height: 14px; color: #fff; background: #e8541e; border-radius: 4px; padding: 1px; box-sizing: border-box; }
+  .port .gbtn.adg .gi { width: 22px; height: 22px; } .port .gbtn.adg .film.fb { width: 12px; height: 12px; right: 2px; top: 2px; }
+  .land #gifts { gap: 8px; bottom: 262px; }
+  .port .gbtn { width: 50px; height: 50px; border-radius: 14px; } .port #gifts { display: grid; grid-template-columns: 50px 50px; gap: 6px; margin-bottom: 6px; } .port .gbtn .gt, .port .gbtn.adg .adt { font-size: 10px; } .port .gbtn.adg .film { width: 20px; height: 20px; } .port #zoom { height: 90px; }
+  /* popups and modals: white rounded cards */
+  #modal .box, #sett .box, #welcome .box, #gpop .box { background: #fff; color: var(--ink); border: 0; border-radius: 22px; box-shadow: 0 6px 24px #0005; }
+  #ginfo .ib { background: #fff; color: var(--ink); border: 0; border-radius: 20px; box-shadow: 0 6px 24px #0006; }
+  #gpop h3 { color: var(--ink); } #gsub { color: var(--ink2); opacity: 1; } #ginfo small { color: var(--ink2); opacity: 1; }
+  #gpop .box { padding: 14px 14px 16px; } .port #gpop .box { padding: 12px 8px 12px; }
+  #welcome img { border: 0; box-shadow: 0 3px 8px #0003; }
+  #modal .btn, #welcome .btn, #ginfo .btn { --c: var(--g2); color: #123a12; font-weight: 800; background: linear-gradient(#ffffff66, #fff0 55%), linear-gradient(var(--g1), var(--g2)); box-shadow: 0 3px 0 #3a9a2a; }
+  #modal #mno { --c: #e9ecea; color: var(--ink) !important; background: #e9ecea; box-shadow: 0 3px 0 #b4bbb6; }
+  #gx, #sclose { --c: #fff; background: #eef2ee; box-shadow: 0 2px 0 #b4bbb6; border-radius: 50%; height: 34px; }
+  #ver { color: var(--ink2); }
+  #sett .vol, #sett .box { color: var(--ink); }
+  .vol input { accent-color: #2c8a45; }
+  #toast { background: #fff; color: var(--ink); box-shadow: var(--sh); }
+  .float { text-shadow: 0 2px 0 #fff, 0 0 4px #fff; color: #2c8a45; }
+  .rpop { -webkit-text-stroke: 2px #0009; }
+  #topR .btn { --c: #5cc83a; color: #fff; text-shadow: 0 1px 1px #0005; } #topR .btn.gear { --c: #fff; color: var(--ink); text-shadow: none; } #topR .btn.dbg { --c: #5cc83a; }
+  #topR .btn.prest { --c: #ff8a1f; }
+  #topR .btn.ad { --c: #fff; color: var(--ink); text-shadow: none; }
+  #adov { color: #fff; text-shadow: 0 1px 3px #000; }
+  /* breeding: age-ring dots in enclosure rows, nest pill, Hall of Fame / nest popup, egg flying to the incubator, bred slot */
+  .dots { flex-wrap: wrap; gap: 3px 3px; }
+  .dd { --rc: #ccc; --a: 0; width: 16px; height: 16px; padding: 0; margin: 0; border: 0; border-radius: 50%; cursor: pointer; touch-action: manipulation; box-shadow: 0 1px 0 #0003;
+        background: radial-gradient(circle, var(--rc) 0 56%, #0000 60%), conic-gradient(var(--ink) calc(var(--a) * 1%), #d5ddd5 0); }
+  .dd.inf { background: radial-gradient(circle, var(--rc) 0 56%, #0000 60%), #d5ddd5; }
+  .cel { --rb: conic-gradient(#ff5a5a, #ffb84a, #ffe94a, #6fe06f, #4ac8ff, #8a6bff, #ff5ad8, #ff5a5a); }
+  .dd.cel { position: relative; } .dd.cel::before { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--rb); }
+  #flist .fr i.cel { background: var(--rb); }
+  .dd.em { background: none; box-shadow: inset 0 0 0 2px #1c4a2c44; }
+  .dd.sel { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ff8a1f; transform: scale(1.1); }
+  .dd.old { animation: blink .6s ease-in-out infinite alternate; } @keyframes blink { to { opacity: .3; } }
+  .bt { font-size: 12px; font-weight: 800; color: var(--ink2); margin-left: 4px; white-space: nowrap; }
+  #nest { --c: #fff; display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 2px 10px 2px 7px; font-size: 13px; pointer-events: auto; align-self: flex-end; }
+  #nest svg { width: 15px; height: 18px; color: #ff8a1f; }
+  #fpop { position: absolute; inset: 0; background: #0009; display: grid; place-items: center; pointer-events: auto; z-index: 5; }
+  #fpop .box { position: relative; background: #fff; color: var(--ink); border-radius: 22px; box-shadow: 0 6px 24px #0005; padding: 14px 14px 16px; width: min(380px, 92vw); box-sizing: border-box; text-align: center; }
+  #fpop h3 { margin: 0; font-size: 22px; } #fsub { font-size: 14px; color: var(--ink2); margin: 4px 0 10px; min-height: 1.3em; }
+  #flist { display: flex; flex-direction: column; gap: 6px; max-height: 50dvh; overflow-y: auto; }
+  #flist .fr { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 12px; background: #f3f7f1; font-size: 15px; text-align: left; }
+  #flist .fr i { width: 16px; height: 16px; border-radius: 50%; background: var(--rc); box-shadow: inset 0 -2px 0 #0004, 0 0 0 1px #0006; flex-shrink: 0; }
+  #flist .fr i.eg { width: 14px; height: 18px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; }
+  #flist .fr span { flex: 1; } #flist .fr b { color: #2c8a45; }
+  #fx { position: absolute; right: 8px; top: 8px; width: 34px; padding: 0; --c: #fff; background: #eef2ee; box-shadow: 0 2px 0 #b4bbb6; border-radius: 50%; height: 34px; }
+  .fly { position: fixed; z-index: 4; width: 22px; height: 28px; margin: -14px 0 0 -11px; pointer-events: none; opacity: 1; filter: drop-shadow(0 0 2px #0009);
+         transition: left .9s ease-in-out, top .9s cubic-bezier(.3, -.7, .6, 1), opacity .9s ease-in; } .fly svg { width: 100%; height: 100%; display: block; }
+  #fame svg { width: 22px; height: 22px; }
+  .slot.bred .sring { background: radial-gradient(circle, #1c4a2c 0 56%, #0000 58%), conic-gradient(var(--rc) calc(var(--p) * 1%), #1c4a2c 0); }
+  .slot.bred .eggi { filter: drop-shadow(0 0 3px var(--rc)) drop-shadow(0 0 2px var(--rc)); }
+  .port #nest { min-height: 26px; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -252,6 +397,7 @@
     </div>
     <div id="topR">
       <button class="btn gear" id="gear" aria-label="Settings">⚙</button>
+      <button class="btn gear" id="fame" aria-label="Hall of Fame" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10v2h3v3c0 2.5-1.8 4.4-4.3 4.9A5 5 0 0113 16v2h3v3H8v-3h3v-2a5 5 0 01-2.7-3.1C5.8 12.4 4 10.5 4 8V5h3zM6 7v1c0 1 .6 1.9 1.5 2.3A9 9 0 017 7zm12 0h-1.5a9 9 0 01-.5 3.3c.9-.4 2-1.3 2-2.3z"/></svg></button>
       <button class="btn" id="newegg" hidden></button>
       <button class="btn prest" id="prest" hidden></button>
       <button class="btn gift" id="gift" hidden>🎁</button>
@@ -270,16 +416,17 @@
         <div id="zoomw" class="ui"><span>+</span><input id="zoom" type="range" min="0" max="1000" aria-label="Zoom"><span>−</span></div>
       </div>
       <div id="hatchrow">
+        <button class="btn ui" id="nest" hidden aria-label="Nest: eggs waiting for a free incubator slot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C7 2 4 10 4 14a8 8 0 0016 0c0-4-3-12-8-12z"/></svg><span></span></button>
         <div id="eggsw"></div>
         <div id="incub"></div>
         <div id="ring"><button class="round" id="eggbtn"></button></div>
       </div>
     </div>
     <div id="tabs" class="ui">
-      <button class="tab" data-tab="habs">Enclosures</button>
-      <button class="tab" data-tab="vehs">Tours</button>
-      <button class="tab" data-tab="shops">Shops</button>
-      <button class="tab" data-tab="res">Research</button>
+      <button class="tab" data-tab="habs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20V8l3-3 3 3v12M9 20V8l3-3 3 3v12M15 20V8l3-3 3 3v12M3 12h18M3 17h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Enclosures</button>
+      <button class="tab" data-tab="vehs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14a2 2 0 012 2v12H3V5a2 2 0 012-2zM3 11h18M7 17v3M17 17v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="7.5" cy="14" r="1.2" fill="currentColor"/><circle cx="16.5" cy="14" r="1.2" fill="currentColor"/></svg>Tours</button>
+      <button class="tab" data-tab="shops"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l2-5h14l2 5M3 9v11h18V9M3 9c0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0 0 2 3 2 3 0M9 20v-6h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Shops</button>
+      <button class="tab" data-tab="res"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 002 3h10a2 2 0 002-3l-5-9V3M7.5 14h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>Research</button>
     </div>
     <div id="panel">
       <div class="pane" id="p-habs"></div>
@@ -296,6 +443,9 @@
   <div id="gpop" hidden>
     <div class="box"><h3 id="gtitle"></h3><div id="gsub"></div><div id="gweek"></div><div id="glist"></div><button class="btn" id="gx" aria-label="Close">✕</button>
       <div id="ginfo" hidden><div class="ib"><div class="gi"></div><b></b><p></p><small></small><button class="btn">OK</button></div></div></div>
+  </div>
+  <div id="fpop" hidden>
+    <div class="box"><h3 id="ftitle"></h3><div id="fsub"></div><div id="flist"></div><button class="btn" id="fx" aria-label="Close">✕</button></div>
   </div>
   <div id="finger" hidden>👇</div>
   <div id="welcome" hidden>
